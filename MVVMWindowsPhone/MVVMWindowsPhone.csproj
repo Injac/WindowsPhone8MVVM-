@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bootstrapper\Bootstrapper.cs" />
+    <Compile Include="DAL\SQLiteDriver.cs" />
+    <Compile Include="DAL\SQLiteRepository.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -190,8 +193,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Bootstrapper\" />
-    <Folder Include="DAL\" />
     <Folder Include="Services\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>

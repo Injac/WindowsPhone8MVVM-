@@ -102,7 +102,7 @@ namespace MVVMWindowsPhone.Core.Portable.Bootstrapping
         /// </summary>
         public virtual void ConfigureBootstrapper()
         {
-           //Not implemented yet.
+            
         }
 
      

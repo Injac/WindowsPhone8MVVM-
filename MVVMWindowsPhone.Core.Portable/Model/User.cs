@@ -10,8 +10,14 @@ namespace MVVMWindowsPhone.Core.Portable.Model
     /// we will use
     /// for demonstration purposes.
     /// </summary>
-    public class User : MVVMWindowsPhone.Core.Portable.Model.IUser
+    public class User
     {
+
+        /// <summary>
+        /// Primary key.
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// User name.
         /// </summary>
@@ -25,8 +31,8 @@ namespace MVVMWindowsPhone.Core.Portable.Model
         /// <summary>
         /// An image.
         /// </summary>
-        public string Image {get;set;}
-               
-      
+        public string Image { get; set; }
+
+
     }
 }
