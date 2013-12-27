@@ -57,7 +57,7 @@ namespace UnitTesting
             users = userList.AsQueryable<User>();
 
             testRepo = new Mock<IRepository<User, IFakeDBContext<User>>>();
-
+                        
             testRepo.SetupProperty(repo => repo.Driver.Context.FakeTable,userList);
 
             testRepo.Setup(repo => repo.GetAllEntries()).Returns(users);

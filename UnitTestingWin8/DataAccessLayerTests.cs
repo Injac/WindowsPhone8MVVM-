@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MVVMWindowsPhone.Core.Portable.DAL;
-using UnitTesting.Fakes;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using MVVMWindowsPhone.Core.Portable.Model;
-using Microsoft.Phone.Testing;
+using UnitTesting.Fakes;
+using MVVMWindowsPhone.Core.Portable.DAL;
 
-namespace UnitTesting
+namespace UnitTestingWin8
 {
     /// <summary>
     /// Testexample without 
@@ -28,7 +26,7 @@ namespace UnitTesting
         /// <summary>
         /// The test repo
         /// </summary>
-        IRepository<User,FakeDBContext> testRepo;
+        IRepository<User, FakeDBContext> testRepo;
 
 
 
@@ -41,7 +39,7 @@ namespace UnitTesting
             //Prepare the fake data
             users = new List<User>();
 
-            users.Add(new User(){ Image="http://userimages.com/image1.png", Url="http://user1.com",UserName="TestUser1"});
+            users.Add(new User() { Image = "http://userimages.com/image1.png", Url = "http://user1.com", UserName = "TestUser1" });
             users.Add(new User() { Image = "http://userimages.com/image2.png", Url = "http://user2.com", UserName = "TestUser1" });
             users.Add(new User() { Image = "http://userimages.com/image3.png", Url = "http://user3.com", UserName = "TestUser2" });
             users.Add(new User() { Image = "http://userimages.com/image4.png", Url = "http://user4.com", UserName = "TestUser3" });
@@ -58,11 +56,12 @@ namespace UnitTesting
             users.Add(new User() { Image = "http://userimages.com/image15.png", Url = "http://user15.com", UserName = "TestUser14" });
             users.Add(new User() { Image = "http://userimages.com/image16.png", Url = "http://user16.com", UserName = "TestUser15" });
             users.Add(new User() { Image = "http://userimages.com/image17.png", Url = "http://user17.com", UserName = "TestUser16" });
+            users.Add(new User() { Image = "http://userimages.com/image17.png", Url = "http://user17.com", UserName = "TestUser17" });
 
             this.testRepo = new FakeUserRepository();
-            
+
             var fakeUnitOfWork = new FakeUnitOfWork();
-            
+
             fakeUnitOfWork.SetContext(new FakeDBContext(users));
 
             this.testRepo.Driver = fakeUnitOfWork;
@@ -76,9 +75,9 @@ namespace UnitTesting
         [TestMethod]
         public void GetAllUsersAndCountTest()
         {
-                   
+
             var count = this.testRepo.GetAllEntries().Count();
-            Assert.AreEqual<int>(count,17);
+            Assert.AreEqual<int>(count, 18);
 
         }
 
@@ -88,11 +87,11 @@ namespace UnitTesting
         [TestMethod]
         public void AddUserAndCountTest()
         {
-            this.testRepo.AddEntry(new User(){ Image="Image",Url="some url",UserName="Some UserName"});
+            this.testRepo.AddEntry(new User() { Image = "Image", Url = "some url", UserName = "Some UserName" });
 
             var count = testRepo.GetAllEntries().Count();
 
-            Assert.AreEqual<int>(count,18);
+            Assert.AreEqual<int>(count, 19);
         }
 
         /// <summary>
@@ -102,25 +101,23 @@ namespace UnitTesting
         public void UserFilterTest()
         {
 
-            var filteredUsers = testRepo.GetFilteredEntries(user=>user.UserName.Equals("TestUser1") ||
-                user.UserName.Equals("TestUser2")).ToList<User>();
-                                  
-            Assert.AreEqual<int>(filteredUsers.Count(),3);
-                       
+            var filteredUsers = testRepo.GetFilteredEntries(user => user.UserName.Equals("TestUser1") || user.UserName.Equals("TestUser2")).ToList<User>();
+
+            Assert.AreEqual<int>(filteredUsers.Count(), 3);
+
         }
 
         /// <summary>
         /// Users the delete test.
         /// </summary>
         [TestMethod]
-        [Tag("DeleteOnly")]
         public void UserDeleteTest()
         {
             var userToRemove = testRepo.GetFilteredEntries(user => user.UserName.Contains("TestUser1")).First();
 
             var deletedUser = testRepo.DeleteEntry(userToRemove);
 
-            Assert.AreEqual<int>(testRepo.Driver.Context.FakeTable.Count(), 16);
+            Assert.AreEqual<int>(testRepo.Driver.Context.FakeTable.Count(), 17);
         }
 
         /// <summary>
@@ -129,17 +126,17 @@ namespace UnitTesting
         [TestMethod]
         public void UpdateUserTest()
         {
-            var userToUpdate  = testRepo.GetFilteredEntries(user => user.UserName.Contains("TestUser1")).First();
+            var userToUpdate = testRepo.GetFilteredEntries(user => user.UserName.Contains("TestUser1")).First();
 
-            var updatedEntry = new User(){UserName=userToUpdate.UserName, Image="changed",Url = userToUpdate.Url};
+            var updatedEntry = new User() { UserName = userToUpdate.UserName, Image = "changed", Url = userToUpdate.Url };
 
-            testRepo.Driver.Context.UpdateEntry(userToUpdate,updatedEntry);
+            testRepo.Driver.Context.UpdateEntry(userToUpdate, updatedEntry);
 
-            var updatedUser  = testRepo.GetFilteredEntries(user => user.UserName.Contains("TestUser1")).First();
+            var updatedUser = testRepo.GetFilteredEntries(user => user.UserName.Contains("TestUser1")).First();
 
             Assert.AreEqual<string>(updatedUser.Image, "changed");
-            
+
         }
-              
+
     }
 }
