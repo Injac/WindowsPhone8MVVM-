@@ -16,22 +16,22 @@ namespace MVVMWindowsPhone.Core.Portable.Model
         /// <summary>
         /// Primary key.
         /// </summary>
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         /// <summary>
         /// User name.
         /// </summary>
-        public string UserName { get; set; }
+        public  string UserName { get; set; }
 
         /// <summary>
         /// Url to the homepage.
         /// </summary>
-        public string Url { get; set; }
+        public  string Url { get; set; }
 
         /// <summary>
         /// An image.
         /// </summary>
-        public string Image { get; set; }
+        public  string Image { get; set; }
 
 
     }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 using Ninject.Modules;
+using MVVMWindowsPhone.NinjectModules;
 
 namespace MVVMWindowsPhone.Bootstrapper
 {
@@ -15,11 +16,12 @@ namespace MVVMWindowsPhone.Bootstrapper
         {
             //Initialize the modules
             this.Modules = new List<INinjectModule>();
+
+            this.Modules.Add(new ModuleRuntime());
             
             //Add the modules we need
             //One debug module, and one runtime module
             //for our repository
-
             this.Container = new StandardKernel(this.Modules.ToArray<INinjectModule>());
             
         }

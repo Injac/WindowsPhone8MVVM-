@@ -26,7 +26,11 @@ namespace MVVMWindowsPhone.DAL
             }
         }
 
-      
+        public SQLiteDriver()
+        {
+
+        }
+
         public void SetContext(SQLiteAsyncConnection context)
         {
             if(context == null)

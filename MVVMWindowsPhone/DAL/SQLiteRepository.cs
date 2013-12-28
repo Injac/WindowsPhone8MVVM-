@@ -1,6 +1,8 @@
 ﻿using MVVMWindowsPhone.Core.Portable.DAL;
 using MVVMWindowsPhone.Core.Portable.Model;
+using MVVMWindowsPhone.Model;
 using Ninject;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,10 @@ namespace MVVMWindowsPhone.DAL
     /// <summary>
     /// The SQLiteRepository
     /// </summary>
-    public class SQLiteRepository : ITAPRepository<User, SQLiteDriver>
+    public class SQLiteRepository : ITAPRepository<SQLiteUser, SQLiteAsyncConnection>
     {
 
-        IUnitOfWork<SQLiteDriver> driver;
+        IUnitOfWork<SQLiteAsyncConnection> driver;
 
         /// <summary>
         /// Gets or sets the driver.
@@ -24,7 +26,7 @@ namespace MVVMWindowsPhone.DAL
         /// The driver.
         /// </value>
         [Inject]
-        public IUnitOfWork<SQLiteDriver> Driver
+        public IUnitOfWork<SQLiteAsyncConnection> Driver
         {
             get
             {
@@ -36,25 +38,18 @@ namespace MVVMWindowsPhone.DAL
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SQLiteRepository"/> class.
-        /// </summary>
-        public SQLiteRepository()
-        {
-
-        }
-
+       
         /// <summary>
         /// Gets all entries.
         /// </summary>
         /// <returns></returns>
-        public async Task<IQueryable<User>> GetAllEntries()
+        public async Task<IQueryable<SQLiteUser>> GetAllEntries()
         {
-            var list = await Driver.Context.Context.Table<User>().ToListAsync();
+            var list = await Driver.Context.Table<SQLiteUser>().ToListAsync();
 
             if (list != null)
             {
-                return list.AsQueryable<User>();
+                return list.AsQueryable<SQLiteUser>();
             }
 
             return null;
@@ -68,18 +63,18 @@ namespace MVVMWindowsPhone.DAL
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">Parameter cannot be null or empty.;filter</exception>
-        public async Task<IQueryable<User>> GetFilteredEntries(System.Linq.Expressions.Expression<Func<User, bool>> filter)
+        public async Task<IQueryable<SQLiteUser>> GetFilteredEntries(System.Linq.Expressions.Expression<Func<SQLiteUser, bool>> filter)
         {
             if (filter == null)
             {
                 throw new ArgumentException("Parameter cannot be null or empty.", "filter");
             }
 
-            var list = await Driver.Context.Context.Table<User>().ToListAsync();
+            var list = await Driver.Context.Table<SQLiteUser>().ToListAsync();
 
             if (list != null)
             {
-                return list.AsQueryable<User>().Where(filter);
+                return list.AsQueryable<SQLiteUser>().Where(filter);
             }
 
             return null;
@@ -92,7 +87,7 @@ namespace MVVMWindowsPhone.DAL
         /// <param name="entry">The entry.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">Parameter cannot be null or empty.;entry</exception>
-        public async Task<User> DeleteEntry(User entry)
+        public async Task<SQLiteUser> DeleteEntry(SQLiteUser entry)
         {
 
             if (entry == null)
@@ -100,7 +95,7 @@ namespace MVVMWindowsPhone.DAL
                 throw new ArgumentException("Parameter cannot be null or empty.", "entry");
             }
 
-            var deleted = await Driver.Context.Context.DeleteAsync(entry);
+            var deleted = await Driver.Context.DeleteAsync(entry);
 
             if (deleted != 0)
             {
@@ -121,7 +116,7 @@ namespace MVVMWindowsPhone.DAL
         /// or
         /// Parameter cannot be null or empty;updateValue
         /// </exception>
-        public async Task<User> UpdateEntry(User entry, User updateValue)
+        public async Task<SQLiteUser> UpdateEntry(SQLiteUser entry, SQLiteUser updateValue)
         {
             if (entry == null)
             {
@@ -137,7 +132,7 @@ namespace MVVMWindowsPhone.DAL
             entry.Url = updateValue.Url;
             entry.UserName = updateValue.UserName;
 
-            int updateSuccess = await Driver.Context.Context.UpdateAsync(entry);
+            int updateSuccess = await Driver.Context.UpdateAsync(entry);
 
             if (updateSuccess != 0)
             {
@@ -154,14 +149,14 @@ namespace MVVMWindowsPhone.DAL
         /// <param name="entry">The entry.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">Parameter cannot be null or empty.;entry</exception>
-        public async Task<User> AddEntry(User entry)
+        public async Task<SQLiteUser> AddEntry(SQLiteUser entry)
         {
             if (entry == null)
             {
                 throw new ArgumentException("Parameter cannot be null or empty.", "entry");
             }
 
-            var addSuccess = await Driver.Context.Context.InsertAsync(entry);
+            var addSuccess = await Driver.Context.InsertAsync(entry);
 
             if(addSuccess != 0)
             {

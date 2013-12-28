@@ -8,6 +8,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using MVVMWindowsPhone.Resources;
 
+
 namespace MVVMWindowsPhone
 {
     public partial class App : Application
@@ -17,6 +18,8 @@ namespace MVVMWindowsPhone
         /// </summary>
         /// <returns>The root frame of the Phone Application.</returns>
         public static PhoneApplicationFrame RootFrame { get; private set; }
+
+        public static MVVMWindowsPhone.Bootstrapper.Bootstrapper bootstrapper = new Bootstrapper.Bootstrapper();
 
         /// <summary>
         /// Constructor for the Application object.
@@ -61,12 +64,14 @@ namespace MVVMWindowsPhone
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            bootstrapper.ConfigureBootstrapper();
         }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            bootstrapper.ConfigureBootstrapper();
         }
 
         // Code to execute when the application is deactivated (sent to background)
