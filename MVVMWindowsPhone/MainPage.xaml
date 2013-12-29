@@ -1,20 +1,41 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="MVVMWindowsPhone.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:appb="clr-namespace:BindableApplicationBar;assembly=BindableApplicationBar"
+    xmlns:UserControls="clr-namespace:MVVMWindowsPhone.UserControls"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform.WP8"
+    xmlns:behave="clr-namespace:MVVMWindowsPhone.Behaviours"
+    x:Class="MVVMWindowsPhone.MainPage"
     mc:Ignorable="d"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontFamily="Portable User Interface"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
+    DataContext="{Binding Converter={StaticResource ViewModelConverter}, Source={StaticResource UserViewModel}}"
     shell:SystemTray.IsVisible="True">
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <cmd:EventToCommand Command="{Binding Init}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+
+    <appb:Bindable.ApplicationBar>
+        <appb:BindableApplicationBar IsVisible="True" Background="Azure">
+            <appb:BindableApplicationBarButton IconUri="/Icons/add.png" Text="add" Command="{Binding AddNewUserCommand}"/>
+            <appb:BindableApplicationBarButton IconUri="/Icons/edit.png" Text="edit" Command="{Binding EditUserCommand}"/>
+            <appb:BindableApplicationBarButton IconUri="/Icons/delete.png" Text="delete" Command="{Binding DeleteUserCommand}"/>
+        </appb:BindableApplicationBar>
+    </appb:Bindable.ApplicationBar>
+
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="Transparent" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -39,17 +60,6 @@
             CurrentUICulture of the app at run time.
          -->
 
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-        </StackPanel>
-
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-
-        </Grid>
-
         <!--Uncomment to see an alignment grid to help ensure your controls are
             aligned on common boundaries.  The image has a top margin of -32px to
             account for the System Tray. Set this to 0 (or remove the margin altogether)
@@ -57,6 +67,52 @@
 
             Before shipping remove this XAML and the image itself.-->
         <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
+        <!--TitlePanel contains the name of the application and page title-->
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
+            <TextBlock Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="User List" VerticalAlignment="Top"/>
+            <ListBox x:Name="users" Margin="10,57,10,260" Background="#FF99BCDE" 
+        		SelectedItem="{Binding SelectedItem, Mode=TwoWay}" 
+        		HorizontalContentAlignment="Stretch"
+        		ItemsSource="{Binding Data}" Foreground="Black" FontFamily="Portable User Interface">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Background="White" Margin="0,10,0,10" HorizontalAlignment="Stretch">
+                            <TextBlock FontWeight="Bold" Text="{Binding UserName}" FontFamily="Portable User Interface"/>
+                            <TextBlock Text="{Binding Url}"/>
+                            <TextBlock Text="{Binding Image}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            
+            <TextBox HorizontalAlignment="Left" Height="72" Margin="10,421,0,0" TextWrapping="Wrap" Text="{Binding FilterExpression,Mode=TwoWay}" VerticalAlignment="Top" Width="410">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="KeyUp">
+                        <cmd:EventToCommand Command="{Binding FilterUsersCommand}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                    
+                </i:Interaction.Triggers>
+                <i:Interaction.Behaviors>
+                    <behave:UpdateTextBindingOnPropertyChanged />
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <TextBlock HorizontalAlignment="Left" Margin="26,392,0,0" TextWrapping="Wrap" Text="Filter" VerticalAlignment="Top"/>
+
+        </Grid>
+        <UserControls:AddEditUserControl Margin="0,0,12,79" Grid.RowSpan="2" Visibility="Collapsed" DataContext="{Binding}"/>
+
+        <!--ContentPanel - place additional content here-->
     </Grid>
 
 </phone:PhoneApplicationPage>

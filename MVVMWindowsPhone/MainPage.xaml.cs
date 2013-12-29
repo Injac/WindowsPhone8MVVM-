@@ -8,6 +8,9 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using MVVMWindowsPhone.Resources;
+using VVMWindowsPhone.ViewModel;
+using MVVMWindowsPhone.Model;
+using SQLite;
 
 namespace MVVMWindowsPhone
 {
@@ -17,6 +20,7 @@ namespace MVVMWindowsPhone
         public MainPage()
         {
             InitializeComponent();
+            this.DataContext = App.ModelLocator.Cast<UserViewModel>("UserViewModel");
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();

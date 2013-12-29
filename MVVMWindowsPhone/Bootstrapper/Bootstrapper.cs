@@ -18,6 +18,7 @@ namespace MVVMWindowsPhone.Bootstrapper
             this.Modules = new List<INinjectModule>();
 
             this.Modules.Add(new ModuleRuntime());
+            this.Modules.Add(new ModuleViewModels());
             
             //Add the modules we need
             //One debug module, and one runtime module

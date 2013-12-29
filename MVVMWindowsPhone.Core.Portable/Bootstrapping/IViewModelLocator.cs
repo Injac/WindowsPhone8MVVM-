@@ -21,6 +21,15 @@ namespace MVVMWindowsPhone.Core.Portable.Bootstrapping
         /// The dictionary to 
         /// save the ViewModels to.
         /// </summary>
-        Dictionary<string, ViewModelBase> ViewModels { get; set; }
+        Dictionary<string, dynamic> ViewModels { get; set; }
+
+        /// <summary>
+        /// Casts the specified view model to the desired type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="viewModelName">Name of the view model.</param>
+        /// <returns></returns>
+        T Cast<T>(string viewModelName);
+          
     }
 }

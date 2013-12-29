@@ -30,12 +30,12 @@ namespace MVVMWindowsPhone.Core.Portable.ViewModel
         /// <summary>
         /// Our navigation service we need.
         /// </summary>
-        private readonly  INavigationService navigationService;
+        private readonly INavigationService navigationService;
 
         /// <summary>
         /// The data we need for our ViewModel.
         /// </summary>
-        public  ObservableCollection<T> Data
+        public ObservableCollection<T> Data
         {
             get { return data; }
             set { data = value; }
@@ -44,7 +44,7 @@ namespace MVVMWindowsPhone.Core.Portable.ViewModel
         /// <summary>
         /// The repository we use.
         /// </summary>
-        private readonly IRepository<T,U> repository;
+        protected readonly ITAPRepository<T, U> repository;
 
         /// <summary>
         /// Our constructor.
@@ -52,13 +52,19 @@ namespace MVVMWindowsPhone.Core.Portable.ViewModel
         /// to inject our repository.
         /// </summary>
         /// <param name="repo"></param>
-        [Inject]
-        public BaseViewModel(IRepository<T,U> repo,INavigationService navService)
+          public BaseViewModel(ITAPRepository<T, U> repo, INavigationService navService)
         {
             this.repository = repo;
             this.navigationService = navService;
             this.Data = new ObservableCollection<T>();
         }
-                
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseViewModel{T, U}"/> class.
+        /// </summary>
+        public BaseViewModel()
+        {
+
+        }
     }
 }

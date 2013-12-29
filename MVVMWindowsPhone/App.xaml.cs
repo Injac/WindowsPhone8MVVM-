@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using MVVMWindowsPhone.Resources;
+using MVVMWindowsPhone.Core.Portable.ViewModel;
 
 
 namespace MVVMWindowsPhone
@@ -20,6 +21,8 @@ namespace MVVMWindowsPhone
         public static PhoneApplicationFrame RootFrame { get; private set; }
 
         public static MVVMWindowsPhone.Bootstrapper.Bootstrapper bootstrapper = new Bootstrapper.Bootstrapper();
+
+        public static ViewModelLocator ModelLocator {get;set;}
 
         /// <summary>
         /// Constructor for the Application object.
@@ -65,6 +68,7 @@ namespace MVVMWindowsPhone
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
             bootstrapper.ConfigureBootstrapper();
+            ModelLocator = bootstrapper.Container.GetService(typeof(ViewModelLocator)) as ViewModelLocator;
         }
 
         // Code to execute when the application is activated (brought to foreground)
@@ -72,6 +76,7 @@ namespace MVVMWindowsPhone
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             bootstrapper.ConfigureBootstrapper();
+            ModelLocator = bootstrapper.Container.GetService(typeof(ViewModelLocator)) as ViewModelLocator;
         }
 
         // Code to execute when the application is deactivated (sent to background)

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
 using MVVMWindowsPhone.Core.Portable.Bootstrapping;
+using Ninject;
 
 namespace MVVMWindowsPhone.Core.Portable.ViewModel
 {
@@ -19,12 +20,13 @@ namespace MVVMWindowsPhone.Core.Portable.ViewModel
         /// <summary>
         /// Our view models.
         /// </summary>
-        Dictionary<string, ViewModelBase> viewModels;
+        Dictionary<string, dynamic> viewModels;
 
         /// <summary>
         /// Our view models.
         /// </summary>
-        public Dictionary<string, ViewModelBase> ViewModels
+        [Inject]
+        public Dictionary<string, dynamic> ViewModels
         {
             get { return viewModels; }
             set { viewModels = value; }
@@ -36,7 +38,7 @@ namespace MVVMWindowsPhone.Core.Portable.ViewModel
         public ViewModelLocator()
         {
             
-            ViewModels = new Dictionary<string,ViewModelBase>();
+            ViewModels = new Dictionary<string,dynamic>();
                        
         }
         
@@ -61,7 +63,24 @@ namespace MVVMWindowsPhone.Core.Portable.ViewModel
             }
            
         }
-        
+
+        /// <summary>
+        /// Casts the specified view model to the desired type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="viewModelName">Name of the view model.</param>
+        /// <returns></returns>
+        public T Cast<T>(string viewModelName)
+        {
+            if (ViewModels.ContainsKey(viewModelName))
+            {
+                return (T) this.ViewModels[viewModelName];
+            }
+            else
+            {
+                return default(T);
+            }
+        }
     }
 
 }
